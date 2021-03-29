@@ -1,11 +1,13 @@
-import time
+# import time
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from eshop_products.models import Product
-from .forms import UserNewOrderForm
+from .forms import UserNewOrderForm, UserInfo, ShowUserInfo
 from .models import Order, OrderDetail
-from django.http import HttpResponse
-from zeep import Client
+
+
+# from django.http import HttpResponse
+# from zeep import Client
 
 
 @login_required(login_url='/login')
@@ -30,7 +32,7 @@ def add_user_order(request):
 
 
 @login_required(login_url='/login')
-def add_user_order_product_list(request,*args, **kwargs):
+def add_user_order_product_list(request, *args, **kwargs):
     if request.user.is_authenticated:
         order = Order.objects.filter(owner_id=request.user.id, is_paid=False).first()
         if order is None:
@@ -54,14 +56,57 @@ def user_open_order(request):
     context = {
         'order': None,
         'details': None,
-        'total': 0
+        'total_product': 0,
+        "form": None
     }
     open_order: Order = Order.objects.filter(owner_id=request.user.id, is_paid=False).first()
     if open_order is not None:
+        user_info = UserInfo(request.POST or None,
+                             initial={'full_name': open_order.user_fullname, 'number': open_order.user_number,
+                                      "address": open_order.user_address, "postal_code": open_order.user_postal_code})
+        if user_info.is_valid():
+            full_name = user_info.cleaned_data["full_name"]
+            number = user_info.cleaned_data["number"]
+            address = user_info.cleaned_data["address"]
+            postal_code = user_info.cleaned_data["postal_code"]
+            open_order.user_fullname = full_name
+            open_order.user_number = number
+            open_order.user_address = address
+            open_order.user_postal_code = postal_code
+            open_order.save()
+            return redirect('/confirm_order')
+        
         context['order'] = open_order
         context['details'] = open_order.orderdetail_set.all()
-        context['total'] = open_order.get_total_price()
+        context['total_product'] = open_order.get_total_price()
+        context['total'] = context["total_product"] + 10000
+        context['form'] = user_info
     return render(request, 'order/user_open_order.html', context)
+
+
+@login_required(login_url='/login')
+def confirm_order(request):
+    open_order: Order = Order.objects.filter(owner_id=request.user.id, is_paid=False).first()
+    if open_order.orderdetail_set.count() == 0:
+        return redirect('/open_order')
+    user_info = ShowUserInfo(request.POST or None,
+                             initial={'full_name': open_order.user_fullname, 'number': open_order.user_number,
+                                      "address": open_order.user_address, "postal_code": open_order.user_postal_code})
+    return render(request, 'order/confirm_order.html',
+                  {"form": user_info, "total_product": open_order.get_total_price(),
+                   "total": open_order.get_total_price() + 10000})
+
+
+@login_required(login_url='/login')
+def order_tracking(request, *args, **kwargs):
+    ref_id = kwargs['ref_id']
+    order: Order = Order.objects.filter(owner_id=request.user.id, is_paid=True, is_received=False,
+                                        ref_id=ref_id).first()
+    if order is None:
+        return redirect('/open_order')
+
+    context = {'order': order, 'details': order.orderdetail_set.all()}
+    return render(request, 'order/order_tracking.html', context)
 
 
 @login_required(login_url='/login')

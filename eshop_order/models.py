@@ -7,8 +7,15 @@ from eshop_products.models import Product
 class Order(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='صاحب')
     is_paid = models.BooleanField(verbose_name='پرداخت شده')
+    is_checking = models.BooleanField(verbose_name="بررسی توسط فروشنده", default=False)
+    is_posted = models.BooleanField(verbose_name="تحویل داده شده به پست", default=False)
+    is_received = models.BooleanField(verbose_name="دریافت کالا توسط مشتری", default=False)
     payment_date = models.DateTimeField(blank=True, null=True, verbose_name='تاریخ پرداخت')
     ref_id = models.CharField(blank=True, null=True, verbose_name='کد پیگیری', max_length=300)
+    user_number = models.IntegerField(blank=True, null=True, verbose_name="شماره مشتری")
+    user_address = models.CharField(blank=True, null=True, verbose_name="آدرس مشتری", max_length=1500)
+    user_postal_code = models.IntegerField(blank=True, null=True, verbose_name="کد پستی مشتری")
+    user_fullname = models.CharField(blank=True, null=True, verbose_name="نام و نام خانوادگی مشتری", max_length=150)
 
     class Meta:
         verbose_name = 'سبد خرید'

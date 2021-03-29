@@ -51,6 +51,7 @@ class Product(models.Model):
     active = models.BooleanField(default=False, verbose_name='فعال')
     categories = models.ManyToManyField(ProductCategory, blank=True, verbose_name='دسته بندی ها')
     visit_count = models.IntegerField(default=0, verbose_name='تعداد بازدید ها')
+    is_comment_open = models.BooleanField(default=True, verbose_name="باز بودن نظرات")
 
     object = ProductManager()
 

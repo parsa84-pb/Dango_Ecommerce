@@ -1,89 +1,49 @@
-{% extends 'shared/_MainLayout.html' %}
-{% load static %}
-{% load render_partial %}
-{% block headerLink %}
+{% extends 'shared/_MainLayout.html' %} {% load static %} {% load render_partial %} {% block headerLink %}
     <link rel="stylesheet" href="{% static "css/my_css/image_zoom.css" %}">
-    <script src="{% static "js/my_js/image_zoom.js" %}"></script>
-{% endblock %}
-{% block title %}{{ product.title }}{% endblock %}
-
-{% block content %}
+    <script src="{% static "js/my_js/image_zoom.js" %}"></script> {% endblock %}
+{% block title %}{{ product.title }}{% endblock %}{% block content %}
     <section>
         <div class="container">
             <div class="row">
-
                 <div class="col-sm-9 padding-right">
-                    <div class="product-details"><!--product-details-->
+                    <div class="product-details">
                         <div class="col-sm-5">
                             <div class="view-product">
-                                <div class="img-zoom-container">
-                                    <img id="myimage" src="{{ product.image.url }}" width="300" height="240"
-                                         alt="{{ product.title }}">
+                                <div class="img-zoom-container"><img id="myimage" src="{{ product.image.url }}"
+                                                                     width="300" height="240" alt="{{ product.title }}">
                                     <div id="myresult" class="img-zoom-result"></div>
                                 </div>
                             </div>
                             <div id="similar-product" class="carousel slide" data-ride="carousel">
-
-                                <!-- Wrapper for slides -->
-                                <div class="carousel-inner">
-                                    {% for galerry_list in galleries %}
-                                        <div class="item {{ forloop.first|yesno:'active,' }}">
-                                            {% for gallery in galerry_list %}
-                                                <a href=""><img style="width: 85px;height: 85px;"
-                                                                src="{{ gallery.image.url }}"
-                                                                alt="{{ gallery.title }}"></a>
-                                            {% endfor %}
-                                        </div>
-                                    {% endfor %}
-
-                                </div>
-
-                                <!-- Controls -->
-                                <a class="right item-control" href="#similar-product" data-slide="next">
-                                    <i class="fa fa-angle-right"></i>
-                                </a>
-                                <a class="left item-control" href="#similar-product" data-slide="prev">
-                                    <i class="fa fa-angle-left"></i>
-                                </a>
-                            </div>
-
+                                <div class="carousel-inner"> {% for galerry_list in galleries %}
+                                    <div class="item {{ forloop.first|yesno:'active,' }}">
+                                        {% for gallery in galerry_list %}
+                                            <a href=""><img style="width: 85px;height: 85px;"
+                                                            src="{{ gallery.image.url }}"
+                                                            alt="{{ gallery.title }}"></a> {% endfor %}
+                                    </div> {% endfor %}</div>
+                                <a class="right item-control" href="#similar-product" data-slide="next"> <i
+                                        class="fa fa-angle-right"></i> </a> <a class="left item-control"
+                                                                               href="#similar-product"
+                                                                               data-slide="prev"> <i
+                                    class="fa fa-angle-left"></i> </a></div>
                         </div>
                         <div class="col-sm-7">
-                            <div class="product-information"><!--/product-information-->
-                                <img src="{% static 'images/product-details/new.png' %}" class="newarrival" alt="">
-                                <div>
-                                    <h2>{{ product.title }}</h2>
-                                    <p>شناسـه :{{ product.id }}</p>
+                            <div class="product-information"><img src="{% static 'images/product-details/new.png' %}"
+                                                                  class="newarrival" alt="">
+                                <div><h2>{{ product.title }}</h2>
+                                    <p>شناسـه :{{ product.id }}</p></div>
+                                <div><span> <span>قیمت : {{ product.price }} تومان</span> </span> <span><form
+                                        action="/add-user-order"
+                                        method="post"> {% csrf_token %} {{ new_order_form.product_id }} <label>تعداد :</label> {{ new_order_form.count }} <button
+                                        type="submit" class="btn btn-fefault cart"> <i class="fa fa-shopping-cart"></i> افـزودن به سبـد خریـد </button></form> </span>
                                 </div>
-                                <div>
-									<span>
-										<span>قیمت : {{ product.price }} تومان</span>
-									</span>
-                                    <span>
-                                    <form action="/add-user-order" method="post">
-                                        {% csrf_token %}
-                                        {{ new_order_form.product_id }}
-                                        <label>تعداد :</label>
-                                        {{ new_order_form.count }}
-                                        <button type="submit" class="btn btn-fefault cart">
-                                            <i class="fa fa-shopping-cart"></i>
-                                            افـزودن به سبـد خریـد
-										</button>
-
-                                    </form>
-                                    </span>
-
-                                </div>
-                                <div>
-                                    <p><b>موجـودی :</b> در انبـار موجود می باشد</p>
-                                    <p><b>برنـد :</b> برنـد </p>
-                                </div>
-
-                            </div><!--/product-information-->
+                                <div><p><b>موجـودی :</b> در انبـار موجود می باشد</p>
+                                    <p><b>برنـد :</b> برنـد</p></div>
+                            </div>
                         </div>
-                    </div><!--/product-details-->
-
-                    <div class="category-tab shop-details-tab"><!--category-tab-->
+                    </div>
+                    <div class="category-tab shop-details-tab">
                         <div class="col-sm-12">
                             <ul class="nav nav-tabs">
                                 <li class="active"><a href="#details" data-toggle="tab">جزئیات</a></li>
@@ -91,182 +51,106 @@
                             </ul>
                         </div>
                         <div class="tab-content">
-                            <div class="tab-pane fade active in" id="details">
-                                <p>{{ product.description }}</p>
-                            </div>
-                            <div class="tab-pane fade" id="reviews">
+                            <div class="tab-pane fade active in" id="details"><p style="text-align: justify!important;">{{ product.description }}</p></div>
+                            <div class="tab-pane fade" id="reviews"> {% if product.is_comment_open %}
                                 {% if not request.user.is_authenticated %}
                                     <div class="alert alert-danger" style="margin-top: 20px!important; height: 100px;">
                                         <p style="color: darkcyan; font-size: large">برای ارسال نظر وارد اکانت خود
-                                            شوید!</p>
-                                    </div>
-                                {% else %}
-                                    <div class="col-sm-12">
-                                        <h2>نظـر خود را بنویسیـد</h2>
-
-                                        <form method="post">
-                                            {% csrf_token %}
-                                            {{ new_comment }}
-                                            <button type="submit" class="btn btn-default pull-left">
-                                                ارسـال
-                                            </button>
+                                            شوید!</p></div>{% else %}
+                                    <div class="col-sm-12"><h2>نظـر خود را بنویسیـد</h2>
+                                        <form method="post"> {% csrf_token %} {{ new_comment }}
+                                            <button type="submit" class="btn btn-default pull-left"> ارسـال</button>
                                         </form>
                                     </div>
-
                                     <div class="container">
                                         <div class="row">
-                                            <div class="col-md-12">
-
-                                                {% if comments.count != 0 %}
-
-                                                    {% for comment in comments %}
-                                                        <div class="left-col ">
-                                                            <div class="heading">
-                                                                <h4><span>{{ comment.user.username }}</span></h4>
-                                                                <span>{{ comment.date }} </span>
-                                                                {% if request.user.is_superuser %}
-                                                                    <a class="cart_quantity_delete"
-                                                                       href="/remove_comment/{{ comment.id }}"><i
-                                                                            class="fa fa-times fa-3x"></i></a>
-                                                                {% endif %}
-                                                            </div>
-                                                            <div class="cm-text"
-                                                                 style="margin-top: 10px!important;border: black 2px!important; border-radius: 5px!important;">
-                                                                <p>{{ comment.text }}</p>
-                                                            </div>
+                                            <div class="col-md-12">{% if comments.count != 0 %}
+                                                {% for comment in comments %}
+                                                    <div class="left-col">
+                                                        <div class="heading"><h4>
+                                                            <span>{{ comment.user.username }}</span></h4>
+                                                            <span>{{ comment.date }} </span>
+                                                            {% if request.user.is_superuser %}
+                                                                <a class="cart_quantity_delete"
+                                                                   href="/remove_comment/{{ comment.id }}"><i
+                                                                        class="fa fa-times fa-3x"></i></a> {% endif %}
                                                         </div>
                                                         <hr>
-                                                        <hr>
-                                                    {% endfor %}
-
-
-                                                    <div class="clearfix"></div>
-                                                    {#                                                    <ul class="pagination">#}
-                                                    {#                                                    {% if page_obj.has_previous %}#}
-                                                    {#                                                        <li><a href="?page={{ page_obj.previous_page_number }}">قبلی</a>#}
-                                                    {#                                                        </li>#}
-                                                    {#                                                    {% endif %}#}
-                                                    {#                                                    {% if page == page_obj.number %}#}
-                                                    {#                                                        <li class="active"><a#}
-                                                    {#                                                                href="?page={{ page_obj }}">{{ page_obj }}</a>#}
-                                                    {#                                                        </li>#}
-                                                    {#                                                    {% else %}#}
-                                                    {#                                                        <li><a href="?page={{ page_obj }}">{{ page_obj }}</a></li>#}
-                                                    {#                                                    {% endif %}#}
-                                                    {##}
-                                                    {#                                                    {% if page_obj.has_next %}#}
-                                                    {#                                                        <li><a href="?page={{ page_obj.next_page_number }}">بعدی</a>#}
-                                                    {#                                                        </li>#}
-                                                    {#                                                    {% endif %}#}
-                                                {% else %}
-                                                    <div class="alert alert-warning" style="margin-top: 20px;">
-                                                        <p style="color: darkcyan; font-size: large">هیچ نظری برای این
-                                                            محصول
-                                                            یافت نشد! شما اولین نفر باشید!</p>
-                                                    </div>
-                                                {% endif %}
-                                                {#                                                </ul>#}
+                                                        <div class="cm-text" style="border-bottom: grey 3px solid">
+                                                            <p>{{ comment.text }}</p></div>
+                                                    </div>{% endfor %}
+                                                <div class="clearfix"></div> {#<ul class="pagination">#}
+                                                {# {% if page_obj.has_previous %}#}
+                                                {#<li><a href="?page={{ page_obj.previous_page_number }}">قبلی</a>#}
+                                                {#</li>#} {# {% endif %}#} {# {% if page == page_obj.number %}#}
+                                                {#<li class="active"><a#}
+                                                {# href="?page={{ page_obj }}">{{ page_obj }}</a>#} {#</li>#}
+                                                {# {% else %}#}
+                                                {#<li><a href="?page={{ page_obj }}">{{ page_obj }}</a></li>#}
+                                                {# {% endif %}#} {##} {# {% if page_obj.has_next %}#}
+                                                {#<li><a href="?page={{ page_obj.next_page_number }}">بعدی</a>#}
+                                                {#</li>#} {# {% endif %}#} {% else %}
+                                                <div class="alert alert-warning" style="margin-top: 20px;"><p
+                                                        style="color: darkcyan; font-size: large">هیچ نظری برای این
+                                                    محصول یافت نشد! شما اولین نفر باشید!</p></div> {% endif %} {#</ul>#}
                                             </div>
                                         </div>
-                                    </div>
-                                {% endif %}
-                            </div>
+                                    </div> {% endif %} {% else %}
+                                <div class="alert alert-warning" style="margin-top: 20px!important;"><p
+                                        style="color: darkcyan; font-size: large">درحال حاضر نمی توان هیج نظری برای این
+                                    محصول درج کرد!</p></div> {% endif %}</div>
                         </div>
-                    </div><!--/category-tab-->
-
-                    <div class="recommended_items"><!--recommended_items-->
-                        <h2 class="title text-center">محصولات پیشنهادی</h2>
-
+                    </div>
+                    <div class="recommended_items"><h2 class="title text-center">محصولات پیشنهادی</h2>
                         <div id="recommended-item-carousel" class="carousel slide" data-ride="carousel">
-                            <div class="carousel-inner">
-                                {% for suggestion_product in suggestion_products %}
-
-                                    <div class="item {{ forloop.first|yesno:"active," }}">
-                                        {% for p in suggestion_product %}
-                                            <div class="col-sm-4" {% if  product.id == p.id %}
-                                                 style="display: none"
-                                            {% endif %} >
-                                                <div class="product-image-wrapper">
-                                                    <div class="single-products">
-                                                        <div class="productinfo text-center">
-                                                            <a href="{{ p.get_absolute_url }}"><img
-                                                                    src="{{ p.image.url }}" alt="{{ p.title }}"></a>
-                                                            <h2>{{ p.price }}</h2>
-                                                            <a href="{{ p.get_absolute_url }}"><p>{{ p.title }}</p></a>
-                                                            <a href="{{ p.get_absolute_url }}">
-                                                                <div class="choose">
-                                                                    <ul class="nav nav-pills nav-justified">
-                                                                        <li><a href="{{ p.get_absolute_url }}"
-                                                                               title="مشاهده"><i
-                                                                                class="fa fa-eye fa-2x"></i></a></li>
-                                                                        <li>
-                                                                            <a href="/update_favorite_product_list/{{ p.id }}"
-                                                                               title="اضافه کردن به لیست علاقه مندی ها"><i
-                                                                                    class="fa fa-star fa-2x"></i></a>
-                                                                        </li>
-                                                                        <li>
-                                                                            <a href="/add-user-order-product-list/{{ p.id }}"
-                                                                               title="اضافه کردن به سبد خرید"><i
-                                                                                    class="fa fa-shopping-cart fa-2x"></i></a>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                            </a>
+                            <div class="carousel-inner"> {% for suggestion_product in suggestion_products %}
+                                <div class="item {{ forloop.first|yesno:"active," }}"> {% for p in suggestion_product %}
+                                    <div class="col-sm-4" {% if product.id == p.id %}
+                                         style="display: none" {% endif %} >
+                                        <div class="product-image-wrapper">
+                                            <div class="single-products">
+                                                <div class="productinfo text-center"><a href="{{ p.get_absolute_url }}"><img
+                                                        src="{{ p.image.url }}" alt="{{ p.title }}"></a>
+                                                    <h2>{{ p.price }}</h2> <a href="{{ p.get_absolute_url }}">
+                                                        <p>{{ p.title }}</p></a> <a href="{{ p.get_absolute_url }}">
+                                                        <div class="choose">
+                                                            <ul class="nav nav-pills nav-justified">
+                                                                <li><a href="{{ p.get_absolute_url }}" title="مشاهده"><i
+                                                                        class="fa fa-eye fa-2x"></i></a></li>
+                                                                <li><a href="/update_favorite_product_list/{{ p.id }}"
+                                                                       title="اضافه کردن به لیست علاقه مندی ها"><i
+                                                                        class="fa fa-star fa-2x"></i></a></li>
+                                                                <li><a href="/add-user-order-product-list/{{ p.id }}"
+                                                                       title="اضافه کردن به سبد خرید"><i
+                                                                        class="fa fa-shopping-cart fa-2x"></i></a></li>
+                                                            </ul>
                                                         </div>
-                                                    </div>
-                                                </div>
+                                                    </a></div>
                                             </div>
-                                        {% endfor %}
-
-                                    </div>
-                                {% endfor %}
-
-                            </div>
+                                        </div>
+                                    </div> {% endfor %}</div> {% endfor %}</div>
                             <a class="left recommended-item-control" href="#recommended-item-carousel"
-                               data-slide="prev">
-                                <i class="fa fa-angle-left"></i>
-                            </a>
-                            <a class="right recommended-item-control" href="#recommended-item-carousel"
-                               data-slide="next">
-                                <i class="fa fa-angle-right"></i>
-                            </a>
-                        </div>
-                    </div><!--/recommended_items-->
-
-                </div>
-
-                <div class="col-sm-3">
-                    <div class="left-sidebar">
-                        {% render_partial 'product_categories_partial' %}
-
-                        <div class="price-range"><!--price-range-->
-                            <h2>فیلتـر قیمـت</h2>
-                            <div class="well">
-                                <div class="slider slider-horizontal" style="width: 165px;">
-                                    <div class="slider-track">
-                                        <div class="slider-selection" style="left: 0.025%; width: 0.02%;"></div>
-                                        <div class="slider-handle round left-round" style="left: 0.025%;"></div>
-                                        <div class="slider-handle round" style="left: 0.045%;"></div>
-                                    </div>
-                                    <div class="tooltip top" style="top: -30px; left: -30.4423px;">
-                                        <div class="tooltip-arrow"></div>
-                                        <div class="tooltip-inner">250 : 450</div>
-                                    </div>
-                                    <input type="text" class="span2" value="" data-slider-min="0"
-                                           data-slider-max="1000000" data-slider-step="5" data-slider-value="[250,450]"
-                                           id="sl2" style=""></div>
-                                <br>
-                                <b>1.000.000 ريال</b> <b class="pull-left">0 ريال</b>
-                            </div>
-                        </div><!--/price-range-->
+                               data-slide="prev"> <i class="fa fa-angle-left"></i> </a> <a
+                                class="right recommended-item-control" href="#recommended-item-carousel"
+                                data-slide="next"> <i class="fa fa-angle-right"></i> </a></div>
                     </div>
                 </div>
-
+                <div class="col-sm-3">
+                    <div class="left-sidebar">
+                        {% render_partial 'product_categories_partial' %}{#<div class="price-range">#}
+                        {#<h2>فیلتـر قیمـت</h2>#} {#<div class="well">#}
+                        {#<div class="slider slider-horizontal" style="width: 165px;">#} {#<div class="slider-track">#}
+                        {#<div class="slider-selection" style="left: 0.025%; width: 0.02%;"></div>#}
+                        {#<div class="slider-handle round left-round" style="left: 0.025%;"></div>#}
+                        {#<div class="slider-handle round" style="left: 0.045%;"></div>#} {#</div>#}
+                        {#<div class="tooltip top" style="top: -30px; left: -30.4423px;">#}
+                        {#<div class="tooltip-arrow"></div>#} {#<div class="tooltip-inner">250 : 450</div>#} {#</div>#}
+                        {# <input type="text" class="span2" value="" data-slider-min="0"#}
+                        {# data-slider-max="1000000" data-slider-step="5" data-slider-value="[250,450]"#}
+                        {# id="sl2" style=""></div>#} {# <br>#}
+                        {# <b>1.000.000 ريال</b> <b class="pull-left">0 ريال</b>#} {#</div>#} {#</div>#}</div>
+                </div>
             </div>
         </div>
     </section>
-    <script>
-        // Initiate zoom effect:
-        imageZoom("myimage", "myresult");
-    </script>
-{% endblock %}
+    <script>imageZoom("myimage", "myresult");</script> {% endblock %}

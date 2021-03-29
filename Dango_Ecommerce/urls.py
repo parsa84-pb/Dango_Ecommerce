@@ -17,11 +17,11 @@ from django.conf.urls.static import static
 from django.urls import path, include
 from django.contrib import admin
 from Dango_Ecommerce import settings
-from .views import home_page, header, footer, about_page
+from .views import home_page, header, footer
 
 urlpatterns = [
     path('', home_page),
-    path('about-us', about_page),
+    # path('about-us', about_page),
     path('header', header, name='header'),
     path('footer', footer, name='footer'),
     path('', include('eshop_account.urls')),
