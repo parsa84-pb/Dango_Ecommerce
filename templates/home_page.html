@@ -6,10 +6,10 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div id="slider-carousel" class="carousel slide" data-ride="carousel">
-                        <ol class="carousel-indicators">
-                            <li data-target="#slider-carousel" data-slide-to="0" class="active"></li>
-                            <li data-target="#slider-carousel" data-slide-to="1"></li>
-                        </ol>
+{#                        <ol class="carousel-indicators">#}
+{#                            <li data-target="#slider-carousel" data-slide-to="0" class="active"></li>#}
+{#                            <li data-target="#slider-carousel" data-slide-to="1"></li>#}
+{#                        </ol>#}
                         <div class="carousel-inner"> {% for slider in sliders %}
                             <div class="item {{ forloop.first|yesno:"active," }}">
                                 <div class="col-sm-6"><h2 style="font-size: 5vm">{{ slider.title }}</h2>
@@ -21,7 +21,7 @@
                                 <div class="col-sm-6">
                                     <div class="slider_container"><a href="{{ slider.link }}"> <img class="slider_image"
                                                                                                     src="{{ slider.image.url }}"
-                                                                                                    alt="{{ slider.title }}"/>
+                                                                                                    alt="{{ slider.title }}" loading="lazy"/>
                                     </a></div>
                                 </div>
                             </div> {% endfor %}</div>

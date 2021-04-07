@@ -35,6 +35,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_render_partial',
+    'channels',
+    'rest_framework',
+    'ckeditor',
 
     # our applications
     'eshop_account',
@@ -46,7 +49,8 @@ INSTALLED_APPS = [
     'eshop_settings',
     'eshop_order',
     'eshop_favorite',
-    'eshop_products_comments'
+    'eshop_products_comments',
+    'eshop_chat'
 ]
 
 MIDDLEWARE = [
@@ -78,7 +82,17 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'Dango_Ecommerce.wsgi.application'
+# WSGI_APPLICATION = 'Dango_Ecommerce.wsgi.application'
+ASGI_APPLICATION = 'Dango_Ecommerce.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('localhost', 6379)],
+        },
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases

@@ -1,1 +1,63 @@
-{% load static %} <header id="header"><div class="header-bottom"><div class="container"><div class="row">{#<div class="col-sm-3">#} {#<div class="col-sm-4" style="text-align: left;">#} {#<div class="logo">#} {# <a href="/"><img src="{{ settings.logo.url }}" alt="Logo"#} {# style="text-align: center;width: 50px;height: 50px; border-radius: 50px"/></a>#} {#</div>#} {#</div>#} {# {% include 'shared/search_products_input_component.html' %}#} {#</div>#}<div class="col-sm-12"><div class="navbar-header"> <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button></div><div class="mainmenu pull-right"><ul class="nav navbar-nav navbar-collapse collapse" style="height: 1px;"><li><a href="/"><i class="fa fa-home"></i> خانه</a></li><li class="dropdown"><a href="/products"><i class="fa fa-shopping-cart"></i> محصولات<i class="fa fa-angle-down"></i></a><ul role="menu" class="sub-menu"> {% for category in categories %}<li><a href="/products/{{ category.name }}">{{ category.title }}</a></li> {% endfor %} {% if categories|length >= 8 %}<li><a href="/products" style="font-size: x-large!important;">...</a></li> {% endif %}</ul></li><li><a href="/contact-us"><i class="fa fa-phone"></i> تماس با ما</a></li> {% if not request.user.is_authenticated %}<li><a href="/login"><i class="fa fa-sign-in"></i> ورود</a></li><li><a href="/register"><i class="fa fa-sign-in"></i> ثبت نام</a></li> {% else %}<li class="dropdown"><a href="/user"><i class="fa fa-dashboard"></i> حساب کاربری<i class="fa fa-angle-down"></i></a><ul role="menu" class="sub-menu"><li><a href="/favorite_product_list"><i class="fa fa-star"></i> لیست علاقه مندی ها</a></li><li><a href="/logout_user"><i class="fa fa-sign-out"></i> خروج</a></li></ul></li> {% if order_tracking is None %}<li><a href="/open_order"><i class="fa fa-shopping-cart"></i> سبد خرید {% if details|length > 0 %} <span>({{ details.count }})</span> {% endif %} </a></li> {% else %}<li class="dropdown"><a href="/open_order"><i class="fa fa-shopping-cart"></i>سبد خرید {% if details|length > 0 %} <span>({{ details.count }})</span> {% endif %} <i class="fa fa-angle-down"></i></a><ul role="menu" class="sub-menu"> {% for order in order_tracking %}<li><a href="/order_tracking/{{ order.ref_id }}">رهگیری سفارش</a></li> {% endfor %}</ul></li> {% endif %} {% endif %} {% if request.user.is_superuser %}<li><a href="/admin"><i class="fa fa-star"></i> ادمین</a></li> {% endif %}<li> {% include 'shared/search_products_input_component.html' %}</li></ul></div></div></div></div></div> </header>
+{% load static %}
+<header id="header">
+    <div class="header-bottom">
+        <div class="container">
+            <div class="row">{#<div class="col-sm-3">#} {#<div class="col-sm-4" style="text-align: left;">#}
+                {#<div class="logo">#} {# <a href="/"><img src="{{ settings.logo.url }}" alt="Logo"#}
+                {# style="text-align: center;width: 50px;height: 50px; border-radius: 50px"/></a>#} {#</div>#}
+                {#</div>#} {# {% include 'shared/search_products_input_component.html' %}#} {#</div>#}
+                <div class="col-sm-12">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                                data-target=".navbar-collapse"><span class="sr-only">Toggle navigation</span> <span
+                                class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+                        </button>
+                    </div>
+                    <div class="mainmenu pull-right">
+                        <ul class="nav navbar-nav navbar-collapse collapse" style="height: 1px;">
+                            <li><a href="/"><i class="fa fa-home"></i> خانه</a></li>
+                            <li class="dropdown"><a href="/products"><i class="fa fa-shopping-cart"></i> محصولات<i
+                                    class="fa fa-angle-down"></i></a>
+                                <ul role="menu" class="sub-menu"> {% for category in categories %}
+                                    <li><a href="/products/{{ category.name }}">{{ category.title }}</a>
+                                    </li> {% endfor %} {% if categories|length >= 8 %}
+                                    <li><a href="/products" style="font-size: x-large!important;">...</a>
+                                    </li> {% endif %}</ul>
+                            </li>
+                            {% if not request.user.is_authenticated %}
+                                <li><a href="/contact-us"><i class="fa fa-phone"></i> تماس با ما</a></li>
+                                <li><a href="/login"><i class="fa fa-sign-in"></i> ورود</a></li>
+                                <li><a href="/register"><i class="fa fa-sign-in"></i> ثبت نام</a></li> {% else %}
+                                <li class="dropdown"><a href="/user"><i class="fa fa-phone"></i> تماس با ما<i
+                                        class="fa fa-angle-down"></i></a>
+                                    <ul role="menu" class="sub-menu">
+                                        <li><a href="/chat/{{ request.user.username }}/"><i class="fa fa-comment"></i> مکالمه با فروشنده</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown"><a href="/user"><i class="fa fa-dashboard"></i> حساب کاربری<i
+                                        class="fa fa-angle-down"></i></a>
+                                    <ul role="menu" class="sub-menu">
+                                        <li><a href="/favorite_product_list"><i class="fa fa-star"></i> لیست علاقه مندی
+                                            ها</a></li>
+                                        <li><a href="/logout_user"><i class="fa fa-sign-out"></i> خروج</a></li>
+                                    </ul>
+                                </li>{% if order_tracking is None %}
+                                <li><a href="/open_order"><i class="fa fa-shopping-cart"></i> سبد خرید
+                                    {% if details|length > 0 %} <span>({{ details.count }})</span> {% endif %} </a></li>
+                            {% else %}
+                                <li class="dropdown"><a href="/open_order"><i class="fa fa-shopping-cart"></i>سبد خرید
+                                    {% if details|length > 0 %} <span>({{ details.count }})</span> {% endif %} <i
+                                            class="fa fa-angle-down"></i></a>
+                                    <ul role="menu" class="sub-menu"> {% for order in order_tracking %}
+                                        <li><a href="/order_tracking/{{ order.ref_id }}">رهگیری سفارش</a>
+                                        </li> {% endfor %}</ul>
+                                </li> {% endif %} {% endif %} {% if request.user.is_superuser %}
+                            <li><a href="/admin"><i class="fa fa-star"></i> ادمین</a></li> {% endif %}
+                            <li> {% include 'shared/search_products_input_component.html' %}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

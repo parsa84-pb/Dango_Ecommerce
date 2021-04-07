@@ -1,8 +1,9 @@
-from django.db import models
 import os
+from django.db import models
 from django.db.models import Q
-from eshop_product_category.models import ProductCategory
 from PIL import Image
+from ckeditor.fields import RichTextField
+from eshop_product_category.models import ProductCategory
 
 
 def get_filename_ext(filename):
@@ -45,7 +46,7 @@ class ProductManager(models.Manager):
 
 class Product(models.Model):
     title = models.CharField(max_length=120, verbose_name='عنوان')
-    description = models.TextField(verbose_name='توضخات')
+    description = RichTextField(verbose_name='توضیحات')
     price = models.IntegerField(verbose_name='قیمت')
     image = models.ImageField(upload_to=upload_image_path, default=None, verbose_name='تصویر')
     active = models.BooleanField(default=False, verbose_name='فعال')

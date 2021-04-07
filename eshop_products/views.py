@@ -28,7 +28,7 @@ def product_detail(request, *args, **kwargs):
     new_order_form = UserNewOrderForm(request.POST or None, initial={'product_id': product_id})
     new_comment = UserNewCommentForm(request.POST or None)
     product = get_object_or_404(Product, pk=product_id)
-    comments = ProductComment.objects.filter(product_id=product_id)
+    comments = ProductComment.objects.filter(product_id=product_id).order_by('-id')
     # paginator = Paginator(comments, 1)
     if product.active:
         product.visit_count += 1
@@ -91,3 +91,12 @@ def remove_comment(request, **kwargs):
         comment = ProductComment.objects.get_queryset().get(id=comment_id)
         comment.delete()
         return redirect(f"/products/{comment.product.id}/{comment.product.title.replace(' ', '-')}")
+
+
+def open_or_close_comment(request, **kwargs):
+    if request.user.is_superuser:
+        product_id = kwargs['pk']
+        product = Product.object.get_queryset().get(id=product_id)
+        product.is_comment_open = (lambda Bool: True if (not Bool) else False)(product.is_comment_open)
+        product.save()
+        return redirect(f"/products/{product.id}/{product.title.replace(' ', '-')}")

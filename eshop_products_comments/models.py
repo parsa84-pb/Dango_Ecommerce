@@ -1,10 +1,11 @@
 from django.contrib.auth.models import User
 from django.db import models
+from ckeditor.fields import RichTextField
 from eshop_products.models import Product
 
 
 class ProductComment(models.Model):
-    text = models.TextField(verbose_name='عنوان')
+    text = RichTextField(verbose_name='عنوان')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='محصول')
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="کاربر")
     date = models.DateField(auto_now_add=True, null=True, blank=True, verbose_name="تاریخ")

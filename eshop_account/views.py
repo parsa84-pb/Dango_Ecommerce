@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from .forms import LoginForm, Register, EditUserProfile, ShowUserProfile
+from eshop_chat.models import Chat
 
 
 def login_user(request):
@@ -33,7 +34,15 @@ def register(request):
         user_name = register_form.cleaned_data.get('user_name')
         email = register_form.cleaned_data.get('email')
         password = register_form.cleaned_data.get('password')
-        User.objects.create_user(user_name, email, password)
+        user = User.objects.create_user(user_name, email, password)
+        new_chat = Chat.objects.create(roomname=user_name)
+        new_chat.members.add(user)
+        new_chat.save()
+        admins = User.objects.filter(is_superuser=True).all()
+        for admin in admins:
+            new_chat.members.add(admin)
+            new_chat.save()
+
         return redirect('/login')
 
     context = {'register_form': register_form}
@@ -74,28 +83,6 @@ def edit_user_profile(request):
     return render(request, 'account/edit_user_profile.html', context)
 
 
-#
-# def show_user_profile(request):
-#     user_id = request.user.id
-#     user = User.objects.get(id=user_id)
-#     if user is None:
-#         raise Http404()
-#     show_user_form = ShowUserProfile(request.POST or None,
-#                                      initial={'first_name': user.first_name, 'last_name': user.last_name})
-#     context = {'show_form': show_user_form}
-#     return render(request, 'account/user_account_main.html', context)
-
-
 def user_sidebar(request):
     context = {}
     return render(request, 'account/user_sidebar_partial.html', context)
-
-#
-# def user_email_forgot_password(request):
-#     email_form = ForgotPasswordGetEmailForm(request.POST or None)
-#     context = {'form': email_form}
-#     return render(request, 'account/password_reset.html', context)
-#
-#
-# def user_email_forgot_password_done(request):
-#     return render(request, 'account/password_reset_done.html', {})

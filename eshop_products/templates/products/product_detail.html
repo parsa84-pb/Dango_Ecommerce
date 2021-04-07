@@ -51,54 +51,61 @@
                             </ul>
                         </div>
                         <div class="tab-content">
-                            <div class="tab-pane fade active in" id="details"><p style="text-align: justify!important;">{{ product.description }}</p></div>
-                            <div class="tab-pane fade" id="reviews"> {% if product.is_comment_open %}
-                                {% if not request.user.is_authenticated %}
-                                    <div class="alert alert-danger" style="margin-top: 20px!important; height: 100px;">
-                                        <p style="color: darkcyan; font-size: large">برای ارسال نظر وارد اکانت خود
-                                            شوید!</p></div>{% else %}
-                                    <div class="col-sm-12"><h2>نظـر خود را بنویسیـد</h2>
-                                        <form method="post"> {% csrf_token %} {{ new_comment }}
-                                            <button type="submit" class="btn btn-default pull-left"> ارسـال</button>
-                                        </form>
-                                    </div>
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col-md-12">{% if comments.count != 0 %}
-                                                {% for comment in comments %}
-                                                    <div class="left-col">
-                                                        <div class="heading"><h4>
-                                                            <span>{{ comment.user.username }}</span></h4>
-                                                            <span>{{ comment.date }} </span>
-                                                            {% if request.user.is_superuser %}
-                                                                <a class="cart_quantity_delete"
-                                                                   href="/remove_comment/{{ comment.id }}"><i
-                                                                        class="fa fa-times fa-3x"></i></a> {% endif %}
-                                                        </div>
-                                                        <hr>
-                                                        <div class="cm-text" style="border-bottom: grey 3px solid">
-                                                            <p>{{ comment.text }}</p></div>
-                                                    </div>{% endfor %}
-                                                <div class="clearfix"></div> {#<ul class="pagination">#}
-                                                {# {% if page_obj.has_previous %}#}
-                                                {#<li><a href="?page={{ page_obj.previous_page_number }}">قبلی</a>#}
-                                                {#</li>#} {# {% endif %}#} {# {% if page == page_obj.number %}#}
-                                                {#<li class="active"><a#}
-                                                {# href="?page={{ page_obj }}">{{ page_obj }}</a>#} {#</li>#}
-                                                {# {% else %}#}
-                                                {#<li><a href="?page={{ page_obj }}">{{ page_obj }}</a></li>#}
-                                                {# {% endif %}#} {##} {# {% if page_obj.has_next %}#}
-                                                {#<li><a href="?page={{ page_obj.next_page_number }}">بعدی</a>#}
-                                                {#</li>#} {# {% endif %}#} {% else %}
-                                                <div class="alert alert-warning" style="margin-top: 20px;"><p
-                                                        style="color: darkcyan; font-size: large">هیچ نظری برای این
-                                                    محصول یافت نشد! شما اولین نفر باشید!</p></div> {% endif %} {#</ul>#}
-                                            </div>
+                            <div class="tab-pane fade active in" id="details"><p
+                                    style="text-align: justify!important;">{{ product.description }}</p></div>
+                            <div class="tab-pane fade" id="reviews">
+                                {% if request.user.is_superuser %}
+                                    <a href="/open_or_close_comment/{{ product.id }}">باز/بسته کردن نظرات</a> {% endif %}
+                                {% if product.is_comment_open %}
+                                    {% if not request.user.is_authenticated %}
+                                        <div class="alermt alert-danger"
+                                             style="margin-top: 20px!important; height: 100px;">
+                                            <p style="color: darkcyan; font-size: large">برای ارسال نظر وارد اکانت خود
+                                                شوید!</p></div>{% else %}
+                                        <div class="col-sm-12"><h2>نظـر خود را بنویسیـد</h2>
+                                            <form method="post"> {% csrf_token %} {{ new_comment.media }}{{ new_comment.as_p }}
+                                                <button type="submit" class="btn btn-default pull-left"> ارسـال</button>
+                                            </form>
                                         </div>
-                                    </div> {% endif %} {% else %}
-                                <div class="alert alert-warning" style="margin-top: 20px!important;"><p
-                                        style="color: darkcyan; font-size: large">درحال حاضر نمی توان هیج نظری برای این
-                                    محصول درج کرد!</p></div> {% endif %}</div>
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col-md-12">{% if comments.count != 0 %}
+                                                    {% for comment in comments %}
+                                                        <div class="left-col">
+                                                            <div class="heading"><h4>
+                                                                <span   >{{ comment.user.username }}</span></h4>
+                                                                <span>{{ comment.date }} </span>
+                                                                {% if request.user.is_superuser %}
+                                                                    <a class="cart_quantity_delete"
+                                                                       href="/remove_comment/{{ comment.id }}"><i
+                                                                            class="fa fa-times fa-3x"></i></a> {% endif %}
+                                                            </div>
+                                                            <hr>
+                                                            <div class="cm-text" style="border-bottom: grey 3px solid">
+                                                                <p>{{ comment.text|safe }}</p></div>
+                                                        </div>{% endfor %}
+                                                    <div class="clearfix"></div> {#<ul class="pagination">#}
+                                                    {# {% if page_obj.has_previous %}#}
+                                                    {#<li><a href="?page={{ page_obj.previous_page_number }}">قبلی</a>#}
+                                                    {#</li>#} {# {% endif %}#} {# {% if page == page_obj.number %}#}
+                                                    {#<li class="active"><a#}
+                                                    {# href="?page={{ page_obj }}">{{ page_obj }}</a>#} {#</li>#}
+                                                    {# {% else %}#}
+                                                    {#<li><a href="?page={{ page_obj }}">{{ page_obj }}</a></li>#}
+                                                    {# {% endif %}#} {##} {# {% if page_obj.has_next %}#}
+                                                    {#<li><a href="?page={{ page_obj.next_page_number }}">بعدی</a>#}
+                                                    {#</li>#} {# {% endif %}#} {% else %}
+                                                    <div class="alert alert-warning" style="margin-top: 20px;"><p
+                                                            style="color: darkcyan; font-size: large">هیچ نظری برای این
+                                                        محصول یافت نشد! شما اولین نفر باشید!</p></div> {% endif %}
+                                                    {#</ul>#}
+                                                </div>
+                                            </div>
+                                        </div> {% endif %} {% else %}
+                                    <div class="alert alert-warning" style="margin-top: 20px!important;"><p
+                                            style="color: darkcyan; font-size: large">درحال حاضر نمی توان هیج نظری برای
+                                        این
+                                        محصول درج کرد!</p></div> {% endif %}</div>
                         </div>
                     </div>
                     <div class="recommended_items"><h2 class="title text-center">محصولات پیشنهادی</h2>
