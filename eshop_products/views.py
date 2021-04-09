@@ -1,4 +1,5 @@
 import itertools
+from functools import lru_cache
 from django.contrib.auth.models import User
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
@@ -18,11 +19,13 @@ class ProductsList(ListView):
         return Product.object.filter(active=True)
 
 
+@lru_cache
 def my_grouper(n, iterable):
     args = [iter(iterable)] * n
     return ([e for e in t if e is not None] for t in itertools.zip_longest(*args))
 
 
+@lru_cache
 def product_detail(request, *args, **kwargs):
     product_id = kwargs['pk']
     new_order_form = UserNewOrderForm(request.POST or None, initial={'product_id': product_id})
@@ -77,6 +80,7 @@ class ProductsListByCategory(ListView):
         return Product.object.get_by_category(category_name)
 
 
+@lru_cache
 def product_categories_partial(request):
     categories = ProductCategory.objects.all()
     context = {
@@ -85,6 +89,7 @@ def product_categories_partial(request):
     return render(request, 'products/products_categories_partial.html', context)
 
 
+@lru_cache
 def remove_comment(request, **kwargs):
     if request.user.is_superuser:
         comment_id = kwargs['pk']
@@ -93,6 +98,7 @@ def remove_comment(request, **kwargs):
         return redirect(f"/products/{comment.product.id}/{comment.product.title.replace(' ', '-')}")
 
 
+@lru_cache
 def open_or_close_comment(request, **kwargs):
     if request.user.is_superuser:
         product_id = kwargs['pk']

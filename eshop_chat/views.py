@@ -1,4 +1,5 @@
 import json
+from functools import lru_cache
 from django.shortcuts import render, Http404
 from django.utils.safestring import mark_safe
 from django.contrib.auth.decorators import login_required
@@ -6,11 +7,7 @@ from .models import Chat
 
 
 @login_required(login_url='/login')
-def index(request):
-    return render(request, 'chat/index.html')
-
-
-@login_required(login_url='/login')
+@lru_cache
 def room(request, room_name):
     username = request.user.username
     chat = Chat.objects.filter(roomname=room_name)

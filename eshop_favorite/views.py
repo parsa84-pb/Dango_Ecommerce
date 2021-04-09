@@ -1,11 +1,11 @@
+from functools import lru_cache
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
-
-from eshop_products.models import Product
 from .models import FavoriteProductList
 from django.contrib.auth.decorators import login_required
 
 
+@lru_cache
 def favorite_product_list(request, *args, **kwargs):
     if not request.user.is_authenticated:
         redirect('/login')
@@ -23,11 +23,12 @@ def favorite_product_list(request, *args, **kwargs):
         return render(request, 'products/favorite_product_list.html', context)
 
 
+@lru_cache
 def update_favorite_product_list(request, **kwargs):
     if not request.user.is_authenticated:
         return redirect('/login')
     product_id = kwargs['pk']
-    already_exist= False
+    already_exist = False
     # product = Product.object.filter(id=product_id)
     f_list = FavoriteProductList.object.filter(user_id=request.user.id).all()
     if f_list.first() is None:
@@ -43,6 +44,7 @@ def update_favorite_product_list(request, **kwargs):
 
 
 @login_required(login_url='/login')
+@lru_cache
 def remove_favorite_product(request, *args, **kwargs):
     favorite_id = kwargs.get('favorite_id')
     if favorite_id is not None:

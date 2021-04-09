@@ -25,6 +25,8 @@ SECRET_KEY = '%#)ymgx5-_20k9_a(1=^*j3&g7-@9)tzmb(ox82qx5qpbbl^68'
 DEBUG = True
 
 ALLOWED_HOSTS = []
+# DEBUG = False
+# ALLOWED_HOSTS =  ['localhost', '127.0.0.1']
 
 # Application definition
 INSTALLED_APPS = [
@@ -52,6 +54,13 @@ INSTALLED_APPS = [
     'eshop_products_comments',
     'eshop_chat'
 ]
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'my_cache_table',
+    }
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

@@ -1,9 +1,11 @@
+from functools import lru_cache
 from django.shortcuts import render
 from .forms import CreateContactForm
 from .models import ContactUs
 from eshop_settings.models import SiteSetting
 
 
+@lru_cache
 def contact_us(request):
     contact_form = CreateContactForm(request.POST or None)
     if contact_form.is_valid():

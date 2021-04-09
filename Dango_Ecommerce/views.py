@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from functools import lru_cache
 from eshop_products.models import Product
 from eshop_products.views import my_grouper
 from eshop_sliders.models import Slider
@@ -7,6 +8,7 @@ from eshop_product_category.models import ProductCategory
 from eshop_order.models import Order
 
 
+@lru_cache
 def header(request, *args, **kwargs):
     settings = SiteSetting.objects.first()
     categories = ProductCategory.objects.all()[:8]
@@ -26,6 +28,7 @@ def header(request, *args, **kwargs):
     return render(request, 'shared/Header.html', context)
 
 
+@lru_cache
 def footer(request, *args, **kwargs):
     settings = SiteSetting.objects.first()
     categories = ProductCategory.objects.all()
@@ -37,6 +40,7 @@ def footer(request, *args, **kwargs):
     return render(request, 'shared/Footer.html', context)
 
 
+@lru_cache
 def home_page(request):
     slider = Slider.objects.all()
     most_visit_product = Product.object.order_by('-visit_count').all()[:8]
@@ -45,6 +49,13 @@ def home_page(request):
     context = {"sliders": slider, "most_visit_product": my_grouper(4, most_visit_product),
                "latest_product": my_grouper(4, latest_product), 'categories': categories}
     return render(request, 'home_page.html', context)
+
+
+@lru_cache
+def handler404(request, *args, **argv):
+    response = render(request, 'error_page/404.html', {})
+    response.status_code = 404
+    return response
 
 #
 # def about_page(request):

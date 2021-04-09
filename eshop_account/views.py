@@ -1,3 +1,4 @@
+from functools import lru_cache
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
@@ -54,6 +55,7 @@ def logout_user(request):
     return redirect('/')
 
 
+@lru_cache
 def user_account_main_page(request):
     user_id = request.user.id
     user = User.objects.get(id=user_id)
@@ -65,6 +67,7 @@ def user_account_main_page(request):
     return render(request, 'account/user_account_main.html', context)
 
 
+@lru_cache
 def edit_user_profile(request):
     user_id = request.user.id
     user = User.objects.get(id=user_id)
@@ -83,6 +86,7 @@ def edit_user_profile(request):
     return render(request, 'account/edit_user_profile.html', context)
 
 
+@lru_cache
 def user_sidebar(request):
     context = {}
     return render(request, 'account/user_sidebar_partial.html', context)
