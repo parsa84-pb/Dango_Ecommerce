@@ -17,10 +17,11 @@ urlpatterns = [
     path('', include('eshop_favorite.urls')),
     path('', include('eshop_products_comments.urls')),
     path('', include('eshop_chat.urls')),
-    url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
-    url(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
+    # url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+    # url(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
     path('admin/', admin.site.urls),
-]
+]+static(settings.MEDIA_URL, serve, document_root=settings.MEDIA_ROOT)
+
 
 if settings.DEBUG:
     urlpatterns = urlpatterns + static(settings.STATIC_URL, serve, document_root=settings.STATIC_ROOT)
