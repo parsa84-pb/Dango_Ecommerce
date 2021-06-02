@@ -1,6 +1,8 @@
+import re
 from django import forms
 from django.contrib.auth.models import User
 from django.core import validators
+from captcha.fields import ReCaptchaV3, ReCaptchaField
 
 
 class EditUserProfile(forms.Form):
@@ -30,6 +32,11 @@ class LoginForm(forms.Form):
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={'placeholder': 'رمز عبور خود را وارد کنید'}),
         label='رمز عبور')
+    captcha = ReCaptchaField(
+        label="تصویر امنیتی",
+        widget=ReCaptchaV3(api_params={'hl': "fa"}),
+        error_messages={"required": 'لطفا تصویر امنیتی را کامل کنید'}
+    )
 
 
 class Register(forms.Form):
@@ -48,6 +55,11 @@ class Register(forms.Form):
     re_password = forms.CharField(
         widget=forms.PasswordInput(attrs={'placeholder': 'رمز عبور خور را دوباره وارد کنید '}),
         label='تکرار رمز عبور')
+    captcha = ReCaptchaField(
+        label="تصویر امنیتی",
+        widget=ReCaptchaV3(api_params={'hl': "fa"}),
+        error_messages={"required": 'لطفا تصویر امنیتی را کامل کنید'}
+    )
 
     def clean_email(self):
 
@@ -57,8 +69,12 @@ class Register(forms.Form):
         user = User.objects.filter(username=user_name).exists()
         user2 = User.objects.filter(email=email).exists()
 
+        regex = '^(\w|\.|\_|\-)+[@](\w|\_|\-|\.)+[.]\w{2,3}$'
+
         if user or user2:
             raise forms.ValidationError('شخص دیگری با این مشخصات ثبت نام کرده است ')
+        elif not re.search(regex, email):
+            raise forms.ValidationError('ایمیل به درستی وارد نشده است')
         return user_name
 
     def clean_re_password(self):
@@ -69,17 +85,7 @@ class Register(forms.Form):
             raise forms.ValidationError('کلمه های عبور باهم مغایرت دارند')
         return password
 
-
 # class ForgotPasswordGetEmailForm(forms.Form):
 #     email = forms.EmailField(
 #         widget=forms.EmailInput(attrs={'placeholder': 'ایمیل خود را وارد کنید:', 'class': 'form-control'}),
 #         label='ایمیل')
-
-
-
-
-
-
-
-
-

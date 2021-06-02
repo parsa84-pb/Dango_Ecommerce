@@ -1,4 +1,5 @@
-from django.conf.urls.static import static
+from django.conf.urls import url
+from django.conf.urls.static import static, serve
 from django.urls import path, include
 from django.contrib import admin
 from Dango_Ecommerce import settings
@@ -16,11 +17,13 @@ urlpatterns = [
     path('', include('eshop_favorite.urls')),
     path('', include('eshop_products_comments.urls')),
     path('', include('eshop_chat.urls')),
+    url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+    url(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
     path('admin/', admin.site.urls),
 ]
 
 if settings.DEBUG:
-    urlpatterns = urlpatterns + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-    urlpatterns = urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns = urlpatterns + static(settings.STATIC_URL, serve, document_root=settings.STATIC_ROOT)
+    urlpatterns = urlpatterns + static(settings.MEDIA_URL, serve, document_root=settings.MEDIA_ROOT)
 
 handler404 = 'Dango_Ecommerce.views.handler404'
