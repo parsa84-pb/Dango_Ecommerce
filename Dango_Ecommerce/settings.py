@@ -169,7 +169,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "assets")
 ]
 
-STATIC_ROOT = os.path.join(BASE_DIR, "static_cdn", "static_root")
+STATIC_ROOT = "/var/89.38.130.76/site_statics/"
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
