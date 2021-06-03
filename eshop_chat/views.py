@@ -6,6 +6,13 @@ from django.contrib.auth.decorators import login_required
 from .models import Chat
 
 
+@lru_cache
+def chat(request):
+    if request.user.is_superuser:
+        chats = Chat.objects.all().order_by("-id")
+        return render(request, "chat/index.html", {"chats": chat})
+
+
 @login_required(login_url='/login')
 @lru_cache
 def room(request, room_name):

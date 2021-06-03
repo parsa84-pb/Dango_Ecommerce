@@ -1,26 +1,12 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8"/>
-    <title>Chat Rooms</title>
-</head>
-<body>
-    What chat room would you like to enter?<br>
-    <input id="room-name-input" type="text" size="100"><br>
-    <input id="room-name-submit" type="button" value="Enter">
+{% extends "shared/_MainLayout.html" %}{% block title%}لیست چت ها{% endblock %}
+{% block content %}
 
-    <script>
-        document.querySelector('#room-name-input').focus();
-        document.querySelector('#room-name-input').onkeyup = function(e) {
-            if (e.keyCode === 13) {  // enter, return
-                document.querySelector('#room-name-submit').click();
-            }
-        };
+<div class="list-group">
+    <a href="/" class="list-group-item active">لیست چت های کاربران</a>
+    {% for chat in chats %}
+        <a href="/chat/{{ chat.roomname }}" class="list-group-item">{{ chat.roomname }}</a>
+    {% endfor %}
 
-        document.querySelector('#room-name-submit').onclick = function(e) {
-            var roomName = document.querySelector('#room-name-input').value;
-            window.location.pathname = '/chat/' + roomName + '/';
-        };
-    </script>
-</body>
-</html>
+
+</div>
+{% endblock %}

@@ -11,7 +11,7 @@ from eshop_order.models import Order
 @lru_cache
 def header(request, *args, **kwargs):
     settings = SiteSetting.objects.first()
-    categories = ProductCategory.objects.all()[:8]
+    categories = ProductCategory.objects.all()[:6]
     open_order: Order = Order.objects.filter(owner_id=request.user.id, is_paid=False).first()
     order_tracking = Order.objects.filter(owner_id=request.user.id, is_paid=True, is_received=False).all()
     context = {

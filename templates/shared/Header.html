@@ -20,18 +20,30 @@
                                     class="fa fa-angle-down"></i></a>
                                 <ul role="menu" class="sub-menu"> {% for category in categories %}
                                     <li><a href="/products/{{ category.name }}">{{ category.title }}</a>
-                                    </li> {% endfor %} {% if categories|length >= 8 %}
+                                    </li> {% endfor %} {% if categories|length >= 6 %}
                                     <li><a href="/products" style="font-size: x-large!important;">...</a>
                                     </li> {% endif %}</ul>
                             </li>
                             {% if not request.user.is_authenticated %}
                                 <li><a href="/contact-us"><i class="fa fa-phone"></i> تماس با ما</a></li>
-                                <li><a href="/login"><i class="fa fa-sign-in"></i> ورود</a></li>
-                                <li><a href="/register"><i class="fa fa-sign-in"></i> ثبت نام</a></li> {% else %}
+                                <li class="dropdown"><a href="/login"><i class="fa fa-sign-in"></i> ورود<i
+                                        class="fa fa-angle-down"></i></a>
+                                    <ul role="menu" class="sub-menu">
+                                        <li><a href="/register"><i class="fa fa-sign-in"></i> ثبت نام</a></li>
+
+                                    </ul>
+                                </li>
+                            {% else %}
                                 <li class="dropdown"><a href="/contact-us"><i class="fa fa-phone"></i> تماس با ما<i
                                         class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
-                                        <li><a href="/chat/{{ request.user.username }}/"><i class="fa fa-comment"></i> مکالمه با فروشنده</a></li>
+                                        <li><a href="/chat/{{ request.user.username }}/"><i class="fa fa-comment"></i>
+                                            مکالمه با فروشنده</a></li>
+                                        {% if request.user.is_superuser %}
+
+                                            <li><a href="/chat/"><i class="fa fa-comment"></i> لیست چت های کاربران</a>
+                                            </li>
+                                        {% endif %}
                                     </ul>
                                 </li>
                                 <li class="dropdown"><a href="/user"><i class="fa fa-dashboard"></i> حساب کاربری<i
