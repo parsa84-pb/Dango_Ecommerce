@@ -79,7 +79,7 @@ RECAPTCHA_PRIVATE_KEY = '6LdSHtkaAAAAALaYrjfYk-3LfDB-YoqkIASayWl1'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -163,15 +163,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_HOST = 'http://89.38.130.76' if not DEBUG else ''
-STATIC_URL = STATIC_HOST + '/site_statics/'
+# STATIC_HOST = 'http://89.38.130.76' if not DEBUG else ''
+STATIC_URL = '/site_statics/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "assets")
 ]
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static_cdn", "static_root")
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
 
