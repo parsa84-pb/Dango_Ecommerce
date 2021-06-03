@@ -27,12 +27,12 @@ SECRET_KEY = '%#)ymgx5-_20k9_a(1=^*j3&g7-@9)tzmb(ox82qx5qpbbl^68'
 
 # ALLOWED_HOSTS = []
 DEBUG = False
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'http://89.38.130.76']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'http://89.38.130.76', "*"]
 
 
 # Application definition
 INSTALLED_APPS = [
-    'whitenoise.runserver_nostatic',
+    # 'whitenoise.runserver_nostatic',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
