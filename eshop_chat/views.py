@@ -10,7 +10,7 @@ from .models import Chat
 def chat(request):
     if request.user.is_superuser:
         chats = Chat.objects.all().order_by("-id")
-        return render(request, "chat/index.html", {"chats": chat})
+        return render(request, "chat/index.html", {"chats": chats})
 
 
 @login_required(login_url='/login')
