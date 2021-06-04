@@ -1,1 +1,25 @@
-<div class="col-sm-{{ resnum }} col-xs-12 pull-right"><div class="product-image-wrapper"><div class="single-products"><div class="productinfo text-center"><div class="image_container"> <a href="{{ product.get_absolute_url }}"> <img src=" {{ product.image.url }}" class="image_component" alt="{{ product.title }}" loading="lazy"> </a></div><h2>تومان{{ product.price }}</h2> <a href="{{ product.get_absolute_url }}"><p>{{ product.title|truncatewords:6 }}</p></a></div></div><div class="choose"><ul class="nav nav-pills nav-justified" style="background-color:#fff!important;border-bottom: 1px solid #FE980F!important;"><li><a href="{{ product.get_absolute_url }}" title="مشاهده"><i class="fa fa-eye fa-2x"></i></a></li><li><a href="/update_favorite_product_list/{{ product.id }}" title="اضافه کردن به لیست علاقه مندی ها"><i class="fa fa-star fa-2x"></i></a></li><li><a href="/add-user-order-product-list/{{ product.id }}" title="اضافه کردن به سبد خرید"><i class="fa fa-shopping-cart fa-2x"></i></a></li></ul></div></div></div> {#<div class="product-overlay">#} {#<div class="overlay-content">#} {#<h2>تومان{{ product.price }}</h2>#} {#<p>{{ product.description | truncatewords:5 }}</p>#} {# <a href="#" class="btn btn-default add-to-cart"><i#} {# class="fa fa-shopping-cart"></i>افزودن به سبـد خریـد</a>#} {#</div>#} {#</div>#}
+<div class="col-sm-{{ resnum }} col-xs-12 pull-right">
+    <div class="product-image-wrapper">
+        <div class="single-products">
+            <div class="productinfo text-center">
+                <div class="image_container"><a href="{{ product.get_absolute_url }}"> <img
+                        src=" {{ product.image.url }}" class="image_component" alt="{{ product.title }}" loading="lazy">
+                </a></div>
+                <h2>تومان{{ product.price }}</h2> <a href="{{ product.get_absolute_url }}">
+                <p>{{ product.title|truncatewords:6 }}</p></a></div>
+        </div>
+        <div class="choose">
+            <ul class="nav nav-pills nav-justified"
+                style="background-color:#fff!important;border-bottom: 1px solid #FE980F!important;">
+                <li><a href="{{ product.get_absolute_url }}" title="مشاهده"><i class="fa fa-eye fa-2x"></i></a></li>
+                <li><a href="/update_favorite_product_list/{{ product.id }}" title="اضافه کردن به لیست علاقه مندی ها"><i
+                        class="fa fa-star fa-2x"></i></a></li>
+                <li><a href="/add-user-order-product-list/{{ product.id }}" title="اضافه کردن به سبد خرید"><i
+                        class="fa fa-shopping-cart fa-2x"></i></a></li>
+
+            </ul>
+        </div>
+    </div>
+</div> {#<div class="product-overlay">#} {#<div class="overlay-content">#} {#<h2>تومان{{ product.price }}</h2>#}
+{#<p>{{ product.description | truncatewords:5 }}</p>#} {# <a href="#" class="btn btn-default add-to-cart"><i#}
+{# class="fa fa-shopping-cart"></i>افزودن به سبـد خریـد</a>#} {#</div>#} {#</div>#}
